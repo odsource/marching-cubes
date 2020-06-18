@@ -5,6 +5,7 @@
 #include <time.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <cmath>
 
 GLuint g_vertexArrayId = 0;
 GLuint g_shaderId = 0;
@@ -106,11 +107,19 @@ GLuint loadShaders( const char * vertex_file_path, const char * fragment_file_pa
 
 std::vector<GLfloat> generateMesh()
 {
-	GLsizei const size = 27;
-
+	GLsizei const size = 45;
+	/*
 	GLfloat const vertices[ size ] = {
 		0.0f, 1.0f, 0.0f,
 		-1.0f, -1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+
+		0.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
+		-2.0f, 1.0f, 0.0f,
+
+		0.0f, 1.0f, 0.0f,
+		2.0f, 1.0f, 0.0f,
 		1.0f, -1.0f, 0.0f,
 
 		-2.0f, -1.0f, -2.0f,
@@ -120,7 +129,22 @@ std::vector<GLfloat> generateMesh()
 		-2.0f, -1.0f, -2.0f,
 		2.0f, -1.0f, 2.0f,
 		2.0f, -1.0f, -2.0f
-	};
+	};*/
+	GLfloat vertices[size] = {};
+	for (int i = 0; i < size; i += 9)
+	{
+		vertices[i] = 0.0f + i / 9 * 2 * std::pow(-1, i/9);
+		vertices[i+1] = 1.0f;
+		vertices[i+2] = 0.0f;
+
+		vertices[i+3] = -1.0f + i / 9 * 2 * std::pow(-1, i / 9);
+		vertices[i+4] = -1.0f;
+		vertices[i+5] = 0.0f;
+
+		vertices[i+6] = 1.0f + i / 9 * 2 * std::pow(-1, i / 9);
+		vertices[i+7] = -1.0f;
+		vertices[i+8] = 0.0f;
+	}
 
 	std::vector<GLfloat> mesh;
 
@@ -134,12 +158,20 @@ std::vector<GLfloat> generateMesh()
 
 std::vector<GLfloat> generateColorData()
 {
-	GLsizei const size = 27;
-
+	GLsizei const size = 45;
+	/*
 	GLfloat const raw[ size ] = {
+		1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+
 		0.0f, 1.0f, 0.0f,
-		1.0f, 0.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
 		0.0f, 0.0f, 1.0f,
+
+		0.0f, 1.0f, 0.0f,
+		1.0f, 1.0f, 0.0f,
+		0.0f, 1.0f, 1.0f,
 
 		0.3f, 0.3f, 0.3f,
 		0.3f, 0.3f, 0.3f,
@@ -148,7 +180,23 @@ std::vector<GLfloat> generateColorData()
 		0.3f, 0.3f, 0.3f,
 		0.3f, 0.3f, 0.3f,
 		0.3f, 0.3f, 0.3f
-	};
+	};*/
+
+	GLfloat raw[size] = {};
+	for (int i = 0; i < size; i += 9)
+	{
+		raw[i] = 0.1f;
+		raw[i + 1] = 0.1f + i / 9 * 0.1f;
+		raw[i + 2] = 0.1f;
+
+		raw[i + 3] = 0.1f + i / 9 * 0.2f;
+		raw[i + 4] = 0.1f;
+		raw[i + 5] = 0.1f;
+
+		raw[i + 6] = 0.1f;
+		raw[i + 7] = 0.1f;
+		raw[i + 8] = 0.1f + i / 9 * 0.3f;
+	}
 
 	std::vector<GLfloat> colors;
 
@@ -212,7 +260,7 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 
 	glBindVertexArray( g_vertexArrayId );
 
-	glDrawArrays( GL_TRIANGLES, 0, 9 );
+	glDrawArrays( GL_TRIANGLES, 0, 15 );
 
 	glBindVertexArray( 0 );
 
@@ -224,7 +272,7 @@ int main( int _argc, char ** _argv )
 	Window * window = Window::getInstance();
 
 	window->open( "Sample", 800, 600 );
-	window->setEyePoint( glm::vec4( 0.0f, 0.0f, 500.0f, 1.0f ) );
+	window->setEyePoint( glm::vec4( 0.0f, 0.0f, 1000.0f, 1.0f ) );
 	window->setActive();
 
 	initializeOpenGL();
