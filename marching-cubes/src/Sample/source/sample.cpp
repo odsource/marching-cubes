@@ -5,6 +5,7 @@
 #include <time.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <cstdlib>
 
 GLuint g_vertexArrayId = 0;
 GLuint g_shaderId = 0;
@@ -137,7 +138,7 @@ std::vector<GLfloat> generateColorData()
 	GLsizei const size = 27;
 
 	GLfloat const raw[ size ] = {
-		0.0f, 1.0f, 0.0f,
+		/*0.0f, 1.0f, 0.0f,
 		1.0f, 0.0f, 0.0f,
 		0.0f, 0.0f, 1.0f,
 
@@ -148,6 +149,18 @@ std::vector<GLfloat> generateColorData()
 		0.3f, 0.3f, 0.3f,
 		0.3f, 0.3f, 0.3f,
 		0.3f, 0.3f, 0.3f
+		*/
+		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX),
+		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX),
+		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX),
+
+		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX),
+		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX),
+		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX),
+
+		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX),
+		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX),
+		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX)
 	};
 
 	std::vector<GLfloat> colors;
