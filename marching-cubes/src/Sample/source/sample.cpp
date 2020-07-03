@@ -5,11 +5,8 @@
 #include <time.h>
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-<<<<<<< HEAD
 #include <cstdlib>
-=======
 #include <cmath>
->>>>>>> 1184eaecf1a87abf6d0e64d82ce246f46657e96f
 
 GLuint g_vertexArrayId = 0;
 GLuint g_shaderId = 0;
