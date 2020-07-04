@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Code">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
@@ -26,7 +26,7 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\sample.cpp">
+    <ClCompile Include="source\marching_cubes.cpp">
       <Filter>Code</Filter>
     </ClCompile>
   </ItemGroup>
