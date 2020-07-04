@@ -180,7 +180,10 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\marching_cubes.cpp" />
+    <ClCompile Include="source\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MCTable.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

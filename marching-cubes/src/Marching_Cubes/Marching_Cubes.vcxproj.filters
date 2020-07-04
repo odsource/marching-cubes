@@ -26,7 +26,12 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\marching_cubes.cpp">
+    <ClInclude Include="MCTable.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\main.cpp">
       <Filter>Code</Filter>
     </ClCompile>
   </ItemGroup>
