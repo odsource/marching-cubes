@@ -16,6 +16,9 @@
     <None Include="scripts\copyShader.bat">
       <Filter>Scripts</Filter>
     </None>
+    <None Include="source\marching_cubes_kernel.cu">
+      <Filter>Code</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="shader\vertex.glsl">
@@ -26,13 +29,19 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MCTable.hpp">
-      <Filter>Code</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
     <ClCompile Include="source\main.cpp">
       <Filter>Code</Filter>
     </ClCompile>
+    <ClCompile Include="source\Marching_Cubes.cpp">
+      <Filter>Code</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\MCTable.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
+    <ClInclude Include="source\Marching_Cubes.hpp">
+      <Filter>Code</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

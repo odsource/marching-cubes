@@ -9,7 +9,7 @@
 #include <cmath>
 #include "Marching_Cubes.hpp"
 
-GLuint g_vertexArrayId[] = { 0, 0 };
+GLuint g_vertexArrayId = 0;
 GLuint g_shaderId = 0;
 
 GLuint loadShaders( const char * vertex_file_path, const char * fragment_file_path )
@@ -107,10 +107,9 @@ GLuint loadShaders( const char * vertex_file_path, const char * fragment_file_pa
 	return ProgramID;
 }
 
-std::vector<GLfloat> generateMesh(int vao)
+std::vector<GLfloat> generateMesh()
 {
 	GLsizei const size = 45;
-	std::vector<GLfloat> mesh;
 	/*
 	GLfloat vertices[size] = {};
 		for (int i = 0; i < size; i += 9)
@@ -128,81 +127,43 @@ std::vector<GLfloat> generateMesh(int vao)
 			vertices[i + 8] = 0.0f + float(vao);
 		}
 	*/
-	if (vao == 0)
+	GLfloat const vertices[size] = {
+		0.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+
+		0.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
+		-2.0f, 1.0f, 0.0f,
+
+		0.0f, 1.0f, 0.0f,
+		2.0f, 1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+
+		-2.0f, -1.0f, -2.0f,
+		-2.0f, -1.0f, 2.0f,
+		2.0f, -1.0f, 2.0f,
+
+		-2.0f, -1.0f, -2.0f,
+		2.0f, -1.0f, 2.0f,
+		2.0f, -1.0f, -2.0f
+	};
+
+	std::vector<GLfloat> mesh;
+
+	for (int index = 0; index < size; index++)
 	{
-		GLfloat const vertices[size] = {
-			0.0f, 1.0f, 0.0f,
-			-1.0f, -1.0f, 0.0f,
-			1.0f, -1.0f, 0.0f,
-
-			0.0f, 1.0f, 0.0f,
-			-1.0f, -1.0f, 0.0f,
-			-2.0f, 1.0f, 0.0f,
-
-			0.0f, 1.0f, 0.0f,
-			2.0f, 1.0f, 0.0f,
-			1.0f, -1.0f, 0.0f,
-
-			-2.0f, -1.0f, -2.0f,
-			-2.0f, -1.0f, 2.0f,
-			2.0f, -1.0f, 2.0f,
-
-			-2.0f, -1.0f, -2.0f,
-			2.0f, -1.0f, 2.0f,
-			2.0f, -1.0f, -2.0f
-		};
-		
-
-		for (int index = 0; index < size; index++)
-		{
-			mesh.push_back(vertices[index]);
-		}
-	}
-	else
-	{
-		GLfloat vertices[size+9] = {
-			12.0f, 12.0f, 12.0f,
-			11.0f, 11.0f, 10.0f,
-			11.0f, -11.0f, 10.0f,
-
-			10.0f, 11.0f, 10.0f,
-			-11.0f, -11.0f, 10.0f,
-			-12.0f, 11.0f, 10.0f,
-
-			10.0f, 11.0f, 10.0f,
-			12.0f, 11.0f, 10.0f,
-			11.0f, -11.0f, 10.0f,
-
-			-12.0f, -11.0f, -12.0f,
-			-12.0f, -11.0f, 12.0f,
-			12.0f, -11.0f, 12.0f,
-
-			-12.0f, -11.0f, -12.0f,
-			12.0f, -11.0f, 12.0f,
-			11.0f, -11.0f, 10.0f,
-			
-			12.0f, -11.0f, 12.0f,
-			11.0f, -11.0f, 10.0f,
-			12.0f, -11.0f, -12.0f
-		};
-
-		for (int index = 0; index < size+12; index++)
-		{
-			mesh.push_back(vertices[index]);
-		}
+		mesh.push_back(vertices[index]);
 	}
 	
-
 	return mesh;
 }
 
-std::vector<GLfloat> generateColorData(int vao)
+std::vector<GLfloat> generateColorData()
 {
 	GLsizei const size = 45;
 	std::vector<GLfloat> colors;
-	if (vao == 0) 
-	{
-		GLfloat const raw[size] = {
+	GLfloat const raw[size] = {
 		1.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
@@ -222,45 +183,11 @@ std::vector<GLfloat> generateColorData(int vao)
 		0.3f, 0.3f, 0.3f,
 		0.3f, 0.3f, 0.3f,
 		0.3f, 0.3f, 0.3f
-		};
+	};
 
-		for (int index = 0; index < size; index++)
-		{
-			colors.push_back(raw[index]);
-		}
-	}
-	else
+	for (int index = 0; index < size; index++)
 	{
-		GLfloat const raw[size+9] = {
-			1.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f,
-
-			1.0f, 1.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-			1.0f, 1.0f, 0.0f,
-
-			0.0f, 0.0f, 1.0f,
-			1.0f, 1.0f, 0.0f,
-			0.0f, 1.0f, 0.0f,
-
-			1.0f, 1.0f, 0.0f,
-			0.0f, 1.0f, 1.0f,
-			1.0f, 1.0f, 0.0f,
-
-			0.3f, 0.3f, 0.3f,
-			0.3f, 0.3f, 0.3f,
-			0.3f, 0.3f, 0.3f,
-
-			1.0f, 1.0f, 0.0f,
-			0.3f, 0.3f, 0.3f,
-			0.3f, 0.3f, 0.3f
-		};
-
-		for (int index = 0; index < size; index++)
-		{
-			colors.push_back(raw[index]);
-		}
+		colors.push_back(raw[index]);
 	}
 	
 	/*
@@ -298,57 +225,37 @@ std::vector<GLfloat> generateColorData(int vao)
 	return colors;
 }
 
-void test(int i) 
+void initializeOpenGL()
 {
 	glEnable(GL_DEPTH_TEST);
 
-	glGenVertexArrays(1, &g_vertexArrayId[i]);
-	glBindVertexArray(g_vertexArrayId[i]);
+	glGenVertexArrays(1, &g_vertexArrayId);
+	glBindVertexArray(g_vertexArrayId);
 
 	GLuint vertexBufferId = 0;
 	glGenBuffers(1, &vertexBufferId);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-	std::vector<GLfloat> const mesh = generateMesh(i);
+	std::vector<GLfloat> const mesh = generateMesh();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mesh.size(), &mesh[0], GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
-	if (i == 0)
-	{
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
-	}
-	else
-	{
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
-	}
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
 	
 
 	GLuint colorBufferId = 0;
 	glGenBuffers(1, &colorBufferId);
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId);
-	std::vector<GLfloat> const colors = generateColorData(i);
+	std::vector<GLfloat> const colors = generateColorData();
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * colors.size(), &colors[0], GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId);
-	if (i == 0)
-	{
-		glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
-	}
-	else
-	{
-		glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
-	}
-
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+	
 	glBindVertexArray(0);
 
 	g_shaderId = loadShaders("Shader/vertex.glsl", "Shader/fragment.glsl");
-}
-
-void initializeOpenGL()
-{
-	test(0);
-	test(1);
 }
 
 void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
@@ -369,13 +276,9 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 	GLuint matrixUniform = glGetUniformLocation( g_shaderId, "modelViewPerspective" );
 	glUniformMatrix4fv( matrixUniform, 1, GL_FALSE, glm::value_ptr( modelViewProjectionMatrix ) );
 
-	glBindVertexArray( g_vertexArrayId[0] );
+	glBindVertexArray( g_vertexArrayId );
 
 	glDrawArrays( GL_TRIANGLES, 0, 15 );
-
-	glBindVertexArray(g_vertexArrayId[1]);
-
-	glDrawArrays(GL_TRIANGLES, 0, 15);
 
 	glBindVertexArray( 0 );
 
