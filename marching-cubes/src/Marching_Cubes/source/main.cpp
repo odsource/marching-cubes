@@ -10,6 +10,8 @@
 #include "Marching_Cubes.hpp"
 
 GLuint g_vertexArrayId = 0;
+GLuint g_vertexArrayId2 = 1;
+
 GLuint g_shaderId = 0;
 GLsizei num_tri = 0;
 int fun = 0;
@@ -163,7 +165,7 @@ std::vector<GLfloat> generateMesh()
 
 	TRIANGLE_COLLECTION* tc = marching_cubes(&vox);
 	num_tri = tc->num;
-
+	
 	std::vector<GLfloat> mesh;
 
 	for (int i = 0; i < num_tri; i++)
@@ -180,52 +182,30 @@ std::vector<GLfloat> generateMesh()
 		mesh.push_back(tc->t[i].v3.p[1]);
 		mesh.push_back(tc->t[i].v3.p[2]);
 	}
-
+	
 	return mesh;
 }
 
-std::vector<GLfloat> generateColorData()
+std::vector<GLfloat> generateColorData(int vao)
 {
-	/*
-	GLsizei const size = 45;
-	
-	GLfloat const raw[size] = {
-		1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-
-		0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-		0.0f, 0.0f, 1.0f,
-
-		0.0f, 1.0f, 0.0f,
-		1.0f, 1.0f, 0.0f,
-		0.0f, 1.0f, 1.0f,
-
-		0.3f, 0.3f, 0.3f,
-		0.3f, 0.3f, 0.3f,
-		0.3f, 0.3f, 0.3f,
-
-		0.3f, 0.3f, 0.3f,
-		0.3f, 0.3f, 0.3f,
-		0.3f, 0.3f, 0.3f
-	};
-
 	std::vector<GLfloat> colors;
-
-	for (int index = 0; index < size; index++)
+	if (vao == 0)
 	{
-		colors.push_back(raw[index]);
+		for (int i = 0; i < num_tri; i++)
+		{
+			colors.push_back(1.0f);
+			colors.push_back(1.0f);
+			colors.push_back(1.0f);
+		}
 	}
-	*/
-	
-	std::vector<GLfloat> colors;
-
-	for (int i = 0; i < num_tri; i++)
+	else
 	{
-		colors.push_back(1.0f);
-		colors.push_back(1.0f);
-		colors.push_back(1.0f);
+		for (int i = 0; i < num_tri; i++)
+		{
+			colors.push_back(0.0f);
+			colors.push_back(0.0f);
+			colors.push_back(0.0f);
+		}
 	}
 	
 
@@ -253,13 +233,39 @@ void initializeOpenGL()
 	GLuint colorBufferId = 0;
 	glGenBuffers(1, &colorBufferId);
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId);
-	std::vector<GLfloat> const colors = generateColorData();
+	std::vector<GLfloat> const colors = generateColorData(0);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * colors.size(), &colors[0], GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
 	
+	glBindVertexArray(0);
+
+	glGenVertexArrays(1, &g_vertexArrayId2);
+	glBindVertexArray(g_vertexArrayId2);
+
+	GLuint vertexBufferId2 = 0;
+	glGenBuffers(1, &vertexBufferId2);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId2);
+	std::vector<GLfloat> const mesh2 = generateMesh();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mesh2.size(), &mesh2[0], GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId2);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+
+
+	GLuint colorBufferId2 = 0;
+	glGenBuffers(1, &colorBufferId2);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId2);
+	std::vector<GLfloat> const colors2 = generateColorData(1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * colors2.size(), &colors2[0], GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId2);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+
 	glBindVertexArray(0);
 
 	g_shaderId = loadShaders("Shader/vertex.glsl", "Shader/fragment.glsl");
@@ -285,11 +291,23 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 
 	glBindVertexArray( g_vertexArrayId );
 
+	// glPolygonMode gl_line anstatt gl_fill
+	// mit 2 vao zeichnen eins schwarz mit line und eins mit gl_fill normal (selbe meshdaten)
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	glDrawArrays( GL_TRIANGLES, 0, num_tri );
-
+	
 	glBindVertexArray( 0 );
 
-	glUseProgram( 0 );
+	glBindVertexArray(g_vertexArrayId2);
+
+	// glPolygonMode gl_line anstatt gl_fill
+	// mit 2 vao zeichnen eins schwarz mit line und eins mit gl_fill normal (selbe meshdaten)
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glDrawArrays(GL_TRIANGLES, 0, num_tri);
+
+	glBindVertexArray(0);
+
+	glUseProgram(0);
 }
 
 int main( int _argc, char ** _argv )
