@@ -11,6 +11,8 @@
 
 GLuint g_vertexArrayId = 0;
 GLuint g_shaderId = 0;
+GLsizei num_tri = 0;
+int fun = 0;
 
 GLuint loadShaders( const char * vertex_file_path, const char * fragment_file_path )
 {
@@ -109,24 +111,10 @@ GLuint loadShaders( const char * vertex_file_path, const char * fragment_file_pa
 
 std::vector<GLfloat> generateMesh()
 {
-	GLsizei const size = 45;
 	/*
-	GLfloat vertices[size] = {};
-		for (int i = 0; i < size; i += 9)
-		{
-			vertices[i] = 0.0f + i / 9 * 2 * std::pow(-1, i / 9);
-			vertices[i + 1] = 1.0f;
-			vertices[i + 2] = 0.0f + float(vao);
-
-			vertices[i + 3] = -1.0f + i / 9 * 2 * std::pow(-1, i / 9);
-			vertices[i + 4] = -1.0f;
-			vertices[i + 5] = 0.0f + float(vao);
-
-			vertices[i + 6] = 1.0f + i / 9 * 2 * std::pow(-1, i / 9);
-			vertices[i + 7] = -1.0f;
-			vertices[i + 8] = 0.0f + float(vao);
-		}
-	*/
+	GLsizei const size = 45;
+	num_tri = size;
+	
 	GLfloat const vertices[size] = {
 		0.0f, 1.0f, 0.0f,
 		-1.0f, -1.0f, 0.0f,
@@ -148,6 +136,7 @@ std::vector<GLfloat> generateMesh()
 		2.0f, -1.0f, 2.0f,
 		2.0f, -1.0f, -2.0f
 	};
+	
 
 	std::vector<GLfloat> mesh;
 
@@ -155,14 +144,51 @@ std::vector<GLfloat> generateMesh()
 	{
 		mesh.push_back(vertices[index]);
 	}
+	*/
 	
+	
+	VOXEL vox;
+	vox.v[0] = {0.0f, 0.0f, 0.0f};
+	vox.v[1] = { 0.0f, 2.0f, 0.0f };
+	vox.v[2] = { 2.0f, 2.0f, 0.0f };
+	vox.v[3] = { 2.0f, 0.0f, 0.0f };
+	vox.v[4] = { 0.0f, 0.0f, 2.0f };
+	vox.v[5] = { 0.0f, 2.0f, 2.0f };
+	vox.v[6] = { 2.0f, 2.0f, 2.0f };
+	vox.v[7] = { 2.0f, 0.0f, 2.0f };
+	for (int i = 0; i < 8; i++) 
+	{
+		vox.val[i] = density(&vox.v[i], fun); 
+	}
+
+	TRIANGLE_COLLECTION* tc = marching_cubes(&vox);
+	num_tri = tc->num;
+
+	std::vector<GLfloat> mesh;
+
+	for (int i = 0; i < num_tri; i++)
+	{
+		mesh.push_back(tc->t[i].v1.p[0]);
+		mesh.push_back(tc->t[i].v1.p[1]);
+		mesh.push_back(tc->t[i].v1.p[2]);
+
+		mesh.push_back(tc->t[i].v2.p[0]);
+		mesh.push_back(tc->t[i].v2.p[1]);
+		mesh.push_back(tc->t[i].v2.p[2]);
+
+		mesh.push_back(tc->t[i].v3.p[0]);
+		mesh.push_back(tc->t[i].v3.p[1]);
+		mesh.push_back(tc->t[i].v3.p[2]);
+	}
+
 	return mesh;
 }
 
 std::vector<GLfloat> generateColorData()
 {
+	/*
 	GLsizei const size = 45;
-	std::vector<GLfloat> colors;
+	
 	GLfloat const raw[size] = {
 		1.0f, 1.0f, 0.0f,
 		1.0f, 1.0f, 0.0f,
@@ -185,42 +211,23 @@ std::vector<GLfloat> generateColorData()
 		0.3f, 0.3f, 0.3f
 	};
 
+	std::vector<GLfloat> colors;
+
 	for (int index = 0; index < size; index++)
 	{
 		colors.push_back(raw[index]);
 	}
+	*/
 	
-	/*
-		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX) + float(vao),
-		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX) + float(vao),
-		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX) + float(vao),
+	std::vector<GLfloat> colors;
 
-		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX) + float(vao),
-		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX) + float(vao),
-		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX) + float(vao),
-
-		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX) + float(vao),
-		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX) + float(vao),
-		float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX), float(std::rand()) / float(RAND_MAX) + float(vao)
-	};
-	*/
-	/*
-	GLfloat raw[size] = {};
-	for (int i = 0; i < size; i += 9)
+	for (int i = 0; i < num_tri; i++)
 	{
-		raw[i] = 0.1f;
-		raw[i + 1] = 0.1f + i / 9 * 0.1f;
-		raw[i + 2] = 0.1f;
-
-		raw[i + 3] = 0.1f + i / 9 * 0.2f;
-		raw[i + 4] = 0.1f;
-		raw[i + 5] = 0.1f;
-
-		raw[i + 6] = 0.1f;
-		raw[i + 7] = 0.1f;
-		raw[i + 8] = 0.1f + i / 9 * 0.3f;
+		colors.push_back(1.0f);
+		colors.push_back(1.0f);
+		colors.push_back(1.0f);
 	}
-	*/
+	
 
 	return colors;
 }
@@ -278,7 +285,7 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 
 	glBindVertexArray( g_vertexArrayId );
 
-	glDrawArrays( GL_TRIANGLES, 0, 15 );
+	glDrawArrays( GL_TRIANGLES, 0, num_tri );
 
 	glBindVertexArray( 0 );
 

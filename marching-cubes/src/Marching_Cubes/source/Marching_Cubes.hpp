@@ -6,32 +6,25 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 typedef struct {
-	GLfloat X;
-	GLfloat Y;
-	GLfloat Z;
-} VEC;
+	GLfloat p[3];
+} VERTEX;
 
 typedef struct {
-	VEC v1;
-	VEC v2;
-	VEC v3;
-	VEC v4;
-	VEC v5;
-	VEC v6;
-	VEC v7;
-	VEC v8;
-} CUBE;
-
-typedef struct {
-	VEC v;
-	VEC norm;
+	VERTEX v1;
+	VERTEX v2;
+	VERTEX v3;
 } TRIANGLE;
 
 typedef struct {
-	CUBE c;
-	double val[8];
+	TRIANGLE t[16];
+	GLsizei num;
+} TRIANGLE_COLLECTION;
+
+typedef struct {
+	VERTEX v[8];
+	GLfloat val[8];
 } VOXEL;
 
-TRIANGLE* marching_cubes(GLfloat* density_values);
-GLfloat density(VEC* p, std::string fun);
-VEC lin_interpolation(VEC v1, VEC v2, GLfloat value);
+TRIANGLE_COLLECTION* marching_cubes(VOXEL* vox);
+GLfloat density(VERTEX* v, int fun);
+VERTEX lin_interpolation(VERTEX v1, VERTEX v2, GLfloat value);
