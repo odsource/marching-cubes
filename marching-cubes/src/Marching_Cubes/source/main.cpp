@@ -164,11 +164,11 @@ std::vector<GLfloat> generateMesh()
 	}
 
 	TRIANGLE_COLLECTION* tc = marching_cubes(&vox);
-	num_tri = tc->num;
+	num_tri = tc->num * 3;
 	
 	std::vector<GLfloat> mesh;
 
-	for (int i = 0; i < num_tri; i++)
+	for (int i = 0; i < tc->num; i++)
 	{
 		mesh.push_back(tc->t[i].v1.p[0]);
 		mesh.push_back(tc->t[i].v1.p[1]);
@@ -223,6 +223,8 @@ void initializeOpenGL()
 	glGenBuffers(1, &vertexBufferId);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId);
 	std::vector<GLfloat> const mesh = generateMesh();
+	printf("Geschafft \r\n");
+	printf("Size: %d", mesh.size());
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mesh.size(), &mesh[0], GL_STATIC_DRAW);
 
 	glEnableVertexAttribArray(0);

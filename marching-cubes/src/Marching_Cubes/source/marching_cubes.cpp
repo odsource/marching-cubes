@@ -8,7 +8,9 @@ TRIANGLE_COLLECTION* marching_cubes(VOXEL* vox)
 	for (int i = 0; i < 8; i++)
 	{
 		density_values[i] = vox->val[i];
+		printf("%f\r\n", density_values[i]);
 	}
+	printf("\r\n");
 
 	int cubeindex = 0;
 	if (density_values[0] >= isolevel) cubeindex |= 1;
@@ -20,7 +22,12 @@ TRIANGLE_COLLECTION* marching_cubes(VOXEL* vox)
 	if (density_values[6] >= isolevel) cubeindex |= 64;
 	if (density_values[7] >= isolevel) cubeindex |= 128;
 
+	printf("Cubeindex: %d\r\n", cubeindex);
 	int edge_entry = edgeTable[cubeindex];
+	printf("Number of Vertices: %d\r\n", numVertsTable[cubeindex]);
+	int num_verts = numVertsTable[cubeindex];
+	int num_tri = num_verts / 3;
+
 	int t[16];
 	int i = 0;
 	for (int triangle : triTable[cubeindex])
@@ -28,8 +35,7 @@ TRIANGLE_COLLECTION* marching_cubes(VOXEL* vox)
 		t[i] = triangle;
 		i++;
 	}
-	int num_verts = numVertsTable[cubeindex] / 3;
-	int num_tri = num_verts / 3;
+	
 
 	TRIANGLE_COLLECTION tri = {};
 	for (int i = 0; i < num_tri; i++) {
@@ -46,7 +52,7 @@ GLfloat density(VERTEX* v, int fun)
 {
 	if (fun == 0)
 	{
-		return (sin(v->p[0]) + sin(v->p[1]) + sin(v->p[2]));
+		return (sin(v->p[0]) - sin(v->p[1]) + sin(v->p[2]));
 	}
 }
 
