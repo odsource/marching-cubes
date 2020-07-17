@@ -116,9 +116,9 @@ GLuint loadShaders( const char * vertex_file_path, const char * fragment_file_pa
 
 std::vector<GLfloat> generateMesh()
 {
-	/*
+	
 	GLsizei const size = 45;
-	num_tri = size;
+	num_points = size;
 	
 	GLfloat const vertices[size] = {
 		0.0f, 1.0f, 0.0f,
@@ -149,66 +149,8 @@ std::vector<GLfloat> generateMesh()
 	{
 		mesh.push_back(vertices[index]);
 	}
-	*/
 	
-	unsigned int points_size;
-	float4* points;
-	unsigned int grid_size;
-	float4* grid;
-	unsigned int geom_size;
-	float4* geom;
-	// Rendering variables
-	float xmax = 10.0f;
-	float xmin = -10.0f;
-	int numPoints = 3;
-	int dim = 3;
-	int func = 0;
-
-	// Allocate memory
-	points_size = numPoints * numPoints * numPoints * sizeof(float4);
-	points = (float4*)malloc(points_size);
-	grid_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 16
-		* sizeof(float4);
-	grid = (float4*)malloc(grid_size);
-	geom_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 15
-		* sizeof(float4);
-	geom = (float4*)malloc(geom_size);
-
-	// Initialize data
-	int v = -1;
-	int sum = 0;
-	// Initialize points data.
-	float delta = (xmax - xmin) / (numPoints - 1);
-	for (int i = 0; i < numPoints; i++) {
-		for (int j = 0; j < numPoints; j++) {
-			for (int k = 0; k < numPoints; k++) {
-
-				int idx = i + j * numPoints + k * numPoints * numPoints;
-
-				// Set initial position data
-				points[idx].x = xmin + delta * i;
-				points[idx].y = xmax - delta * j;
-				points[idx].z = xmin + delta * k;
-				printf("%f, %f, %f\r\n", points[idx].x, points[idx].y, points[idx].z);
-				v++;
-				if (v == 2) {
-					printf("\r\n");
-					v = -1;
-					sum += 1;
-				}
-			}
-		}
-	}
-	printf("Summe: %d\r\n", sum);
-	num_points = sum*3*3;
-	std::vector<GLfloat> mesh;
-
-	for (int index = 0; index < sum; index++)
-	{
-		mesh.push_back(points[index].x);
-		mesh.push_back(points[index].y);
-		mesh.push_back(points[index].z);
-	}
+	
 	/*
 	VOXEL vox;
 	vox.v[0] = {0.0f, 0.0f, 0.0f};
