@@ -163,6 +163,7 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="marching_cubes_kernel.cuh" />
     <None Include="scripts\copyShader.bat" />
     <None Include="source\marching_cubes_kernel.cu" />
     <Text Include="shader\fragment.glsl">

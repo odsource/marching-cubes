@@ -19,6 +19,9 @@
     <None Include="source\marching_cubes_kernel.cu">
       <Filter>Code</Filter>
     </None>
+    <None Include="marching_cubes_kernel.cuh">
+      <Filter>Code</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="shader\vertex.glsl">
