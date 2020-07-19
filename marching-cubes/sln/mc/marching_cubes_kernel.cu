@@ -595,6 +595,9 @@ int numVertsTable[256] =
     0,
 };
 
+__global__ void points_kernel(float4* points, int size, int func);
+__global__ void kernel3D(float4* points, float4* geom, int size);
+/*
 TRIANGLE_COLLECTION* marching_cubes(VOXEL* vox)
 {
     GLfloat isolevel = 0;
@@ -649,7 +652,7 @@ VERTEX lin_interpolation(VERTEX v1, VERTEX v2, GLfloat* value)
 {
 	return v1;
 }
-
+*/
 void run_cuda_kernel(GLuint* vbo)
 {
     // Map OpenGL buffer object for writing from CUDA
@@ -680,7 +683,6 @@ void run_cuda_kernel(GLuint* vbo)
     // Check for containment of vertices
     points_kernel << <blocks, threadsPerBlock >> >
         (dev_points, numPoints, func);
-
     // Obtain the triangles from the data table
     kernel3D << <blocks, threadsPerBlock >> >
         (dev_points, dev_geometry, numPoints);
@@ -789,104 +791,8 @@ void kernel3D(float4* points, float4* geom, int size)
     }
 }
 
-// Create VBOs
-void createVBOs(GLuint* vbo)
-{
-    
-    // Initialize points and grid
-    unsigned int points_size;
-    float4* points;
-    unsigned int grid_size;
-    float4* grid;
-    unsigned int geom_size;
-    float4* geom;
-
-    // Allocate memory
-    points_size = numPoints * numPoints * numPoints * sizeof(float4);
-    points = (float4*)malloc(points_size);
-    grid_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 16
-        * sizeof(float4);
-    grid = (float4*)malloc(grid_size);
-    geom_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 15
-        * sizeof(float4);
-    geom = (float4*)malloc(geom_size);
-    // Initialize data
-    generate_data(points, grid, geom);
-    
-    /*
-    // Activate VBO id to use.
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-
-    // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, grid_size, grid, GL_DYNAMIC_DRAW);
-
-    // Activate VBO id to use.
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
-
-    // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, points_size, points, GL_DYNAMIC_DRAW);
-
-    // Register buffer objects with CUDA
-    if (cudaGLRegisterBufferObject(vbo[1]) != cudaSuccess)
-    {
-        printf("Could not register vbo for CUDA access!\r\n");
-    }
-
-    // Activate VBO id to use.
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-
-    // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, geom_size, geom, GL_DYNAMIC_DRAW);
-
-    // Register buffer objects with CUDA
-    if (cudaGLRegisterBufferObject(vbo[2]) != cudaSuccess)
-    {
-        printf("Could not register vbo for CUDA access!\r\n");
-    }
-
-    // Free temporary data
-    free(points); free(grid); free(geom);
-
-    // Release VBOs with ID 0 after use.
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    */
-    // Execute the algorithm
-    run_cuda_kernel(vbo);
-}
-
-// Delete VBOs
-void deleteVBOs(GLuint* vbo)
-{
-    // Delete VBOs
-    glBindBuffer(1, vbo[0]);
-    glDeleteBuffers(1, &vbo[0]);
-    glBindBuffer(1, vbo[1]);
-    glDeleteBuffers(1, &vbo[1]);
-    glBindBuffer(1, vbo[2]);
-    glDeleteBuffers(1, &vbo[2]);
-
-    // Unregister buffer objects with CUDA
-    if ((cudaGLUnregisterBufferObject(vbo[1]) | cudaGLUnregisterBufferObject(vbo[2])) != cudaSuccess)
-    {
-        printf("Failure while unregistering vbos!\r\n");
-    }
-
-    // Free VBOs
-    *vbo = 0;
-}
-
 void generate_data(float4* points, float4* grid, float4* geom)
 {
-    // Allocate memory
-    int numPoints = getNumPoints();
-    points_size = numPoints * numPoints * numPoints * sizeof(float4);
-    points = (float4*)malloc(points_size);
-    grid_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 16
-        * sizeof(float4);
-    grid = (float4*)malloc(grid_size);
-    geom_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 15
-        * sizeof(float4);
-    geom = (float4*)malloc(geom_size);
 
     // Initialize points data.
     float delta = (xmax - xmin) / (numPoints - 1);
@@ -943,20 +849,109 @@ void generate_data(float4* points, float4* grid, float4* geom)
     for (int k = 0; k < (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 15; k++) {
         geom[k] = zero;
     }
-    
-    /*
-	std::vector<float> mesh;
 
-	for (int index = 0; index < (numPoints * numPoints * numPoints); index++)
-	{
-		mesh.push_back(points[index].x);
-		mesh.push_back(points[index].y);
-		mesh.push_back(points[index].z);
+    /*
+    std::vector<float> mesh;
+
+    for (int index = 0; index < (numPoints * numPoints * numPoints); index++)
+    {
+        mesh.push_back(points[index].x);
+        mesh.push_back(points[index].y);
+        mesh.push_back(points[index].z);
         // Saving the density value (inside or outside)
-		mesh.push_back(points[index].w);
-	}
+        mesh.push_back(points[index].w);
+    }
     */
 }
+
+// Create VBOs
+void createVBOs(GLuint* vbo)
+{
+    
+    // Initialize points and grid
+    unsigned int points_size;
+    float4* points;
+    unsigned int grid_size;
+    float4* grid;
+    unsigned int geom_size;
+    float4* geom;
+
+    // Allocate memory
+    points_size = numPoints * numPoints * numPoints * sizeof(float4);
+    points = (float4*)malloc(points_size);
+    grid_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 16
+        * sizeof(float4);
+    grid = (float4*)malloc(grid_size);
+    geom_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 15
+        * sizeof(float4);
+    geom = (float4*)malloc(geom_size);
+    // Initialize data
+    generate_data(points, grid, geom);
+    
+    /*
+    // Activate VBO id to use.
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
+
+    // Upload data to video card.
+    glBufferData(GL_ARRAY_BUFFER, grid_size, grid, GL_DYNAMIC_DRAW);
+
+    // Activate VBO id to use.
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+
+    // Upload data to video card.
+    glBufferData(GL_ARRAY_BUFFER, points_size, points, GL_DYNAMIC_DRAW);
+
+    // Register buffer objects with CUDA
+    if (cudaGLRegisterBufferObject(vbo[1]) != cudaSuccess)
+    {
+        printf("Could not register vbo for CUDA access!\r\n");
+    }
+
+    // Activate VBO id to use.
+    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
+
+    // Upload data to video card.
+    glBufferData(GL_ARRAY_BUFFER, geom_size, geom, GL_DYNAMIC_DRAW);
+
+    // Register buffer objects with CUDA
+    if (cudaGLRegisterBufferObject(vbo[2]) != cudaSuccess)
+    {
+        printf("Could not register vbo for CUDA access!\r\n");
+    }
+
+    ;
+
+    // Release VBOs with ID 0 after use.
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    */
+    // Execute the algorithm
+    // Free temporary data
+    free(points); free(grid); free(geom);
+    run_cuda_kernel(vbo);
+}
+/*
+// Delete VBOs
+void deleteVBOs(GLuint* vbo)
+{
+    // Delete VBOs
+    glBindBuffer(1, vbo[0]);
+    glDeleteBuffers(1, &vbo[0]);
+    glBindBuffer(1, vbo[1]);
+    glDeleteBuffers(1, &vbo[1]);
+    glBindBuffer(1, vbo[2]);
+    glDeleteBuffers(1, &vbo[2]);
+
+    // Unregister buffer objects with CUDA
+    if ((cudaGLUnregisterBufferObject(vbo[1]) | cudaGLUnregisterBufferObject(vbo[2])) != cudaSuccess)
+    {
+        printf("Failure while unregistering vbos!\r\n");
+    }
+
+    // Free VBOs
+    *vbo = 0;
+}
+*/
+
 
 int getNumPoints()
 {

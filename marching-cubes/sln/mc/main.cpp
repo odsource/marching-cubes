@@ -139,7 +139,7 @@ std::vector<GLfloat> generateMesh()
 	GLfloat value = 1;
 	createVBOs(vbo);
 	//lin_interpolation(v1, v2, value);
-	GLuint numPoints = 0;
+	GLuint numPoints = 3;
 	VOXEL vox;
 	//marching_cubes(&vox);
 	int points_size = numPoints * numPoints * numPoints * sizeof(float4);
@@ -150,7 +150,7 @@ std::vector<GLfloat> generateMesh()
 	int geom_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 15
 		* sizeof(float4);
 	geom = (float4*)malloc(geom_size);
-	// generate_data(points, grid, geom);
+	//generate_data(points, grid, geom);
 
 	std::vector<GLfloat> mesh;
 	mesh.push_back(1.0);

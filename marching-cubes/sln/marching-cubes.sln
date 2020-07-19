@@ -18,6 +18,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "glm", "..\src\glm\glm.vcxpr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MarchingCubes", "..\src\Marching_Cubes\Marching_Cubes.vcxproj", "{8B31F7EC-9957-48BC-A365-51E91ACC0E4D}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "mc", "mc\mc.vcxproj", "{22F75369-D49C-4C2D-B313-C99FD55F81EE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -66,6 +68,12 @@ Global
 		{8B31F7EC-9957-48BC-A365-51E91ACC0E4D}.Release|x64.Build.0 = Release|x64
 		{8B31F7EC-9957-48BC-A365-51E91ACC0E4D}.Release|x86.ActiveCfg = Release|Win32
 		{8B31F7EC-9957-48BC-A365-51E91ACC0E4D}.Release|x86.Build.0 = Release|Win32
+		{22F75369-D49C-4C2D-B313-C99FD55F81EE}.Debug|x64.ActiveCfg = Debug|x64
+		{22F75369-D49C-4C2D-B313-C99FD55F81EE}.Debug|x64.Build.0 = Debug|x64
+		{22F75369-D49C-4C2D-B313-C99FD55F81EE}.Debug|x86.ActiveCfg = Debug|x64
+		{22F75369-D49C-4C2D-B313-C99FD55F81EE}.Release|x64.ActiveCfg = Release|x64
+		{22F75369-D49C-4C2D-B313-C99FD55F81EE}.Release|x64.Build.0 = Release|x64
+		{22F75369-D49C-4C2D-B313-C99FD55F81EE}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

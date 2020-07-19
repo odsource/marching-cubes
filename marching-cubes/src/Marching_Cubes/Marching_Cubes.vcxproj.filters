@@ -19,7 +19,7 @@
     <None Include="source\marching_cubes_kernel.cu">
       <Filter>Code</Filter>
     </None>
-    <None Include="marching_cubes_kernel.cuh">
+    <None Include="source\marching_cubes_kernel.cuh">
       <Filter>Code</Filter>
     </None>
   </ItemGroup>
@@ -32,10 +32,10 @@
     </Text>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="source\main.cpp">
+    <ClCompile Include="source\Marching_Cubes.cpp">
       <Filter>Code</Filter>
     </ClCompile>
-    <ClCompile Include="source\Marching_Cubes.cpp">
+    <ClCompile Include="source\main.cpp">
       <Filter>Code</Filter>
     </ClCompile>
   </ItemGroup>

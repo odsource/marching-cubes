@@ -1,7 +1,7 @@
 #pragma once
 // Implementation of the marching cubes algorithm
 #include "Window.hpp"
-#include "source/MCTable.hpp"
+#include "MCTable.hpp"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
