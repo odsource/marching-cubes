@@ -14,16 +14,8 @@
 // Rendering variables
 float xmax = 10.0f;
 float xmin = -10.0f;
-int numPoints = 3;
+int numPoints = 80;
 int func = 0;
-
-// Initialize points and grid
-unsigned int points_size;
-//float4* points;
-unsigned int grid_size;
-//float4* grid;
-unsigned int geom_size;
-//float4* geom;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Marching cubes table data												 //
@@ -653,19 +645,20 @@ VERTEX lin_interpolation(VERTEX v1, VERTEX v2, GLfloat* value)
 	return v1;
 }
 */
-void run_cuda_kernel(GLuint* vbo)
+void run_cuda_kernel(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
 {
+    glBindVertexArray(vao[0]);
     // Map OpenGL buffer object for writing from CUDA
     float4* dev_points;
     float4* dev_geometry;
 
     // Map OpenGL buffers to CUDA
-    if (cudaGLMapBufferObject((void**)&dev_points, vbo[1]) != cudaSuccess) 
+    if (cudaGLMapBufferObject((void**)&dev_points, vbo1[1]) != cudaSuccess) 
     {
         printf("Points buffer could not be mapped to CUDA!\r\n");
     }
     
-    if (cudaGLMapBufferObject((void**)&dev_geometry, vbo[2]) != cudaSuccess)
+    if (cudaGLMapBufferObject((void**)&dev_geometry, vbo1[2]) != cudaSuccess)
     {
         printf("Geometry buffer could not be mapped to CUDA!\r\n");
     }
@@ -688,15 +681,57 @@ void run_cuda_kernel(GLuint* vbo)
         (dev_points, dev_geometry, numPoints);
 
     // Unmap buffer objects from CUDA
-    if (cudaGLUnmapBufferObject(vbo[1]) != cudaSuccess)
+    if (cudaGLUnmapBufferObject(vbo1[1]) != cudaSuccess)
     {
         printf("Could not unmap vbo from CUDA!\r\n");
     }
     
-    if (cudaGLUnmapBufferObject(vbo[2]) != cudaSuccess)
+    if (cudaGLUnmapBufferObject(vbo1[2]) != cudaSuccess)
     {
         printf("Could not unmap vbo from CUDA!\r\n");
     }
+    
+    // Second VAO
+
+    glBindVertexArray(vao[1]);
+    // Map OpenGL buffer object for writing from CUDA
+    float4* dev_points2;
+    float4* dev_geometry2;
+
+    // Map OpenGL buffers to CUDA
+    if (cudaGLMapBufferObject((void**)&dev_points2, vbo2[1]) != cudaSuccess)
+    {
+        printf("Points buffer could not be mapped to CUDA!\r\n");
+    }
+
+    if (cudaGLMapBufferObject((void**)&dev_geometry2, vbo2[2]) != cudaSuccess)
+    {
+        printf("Geometry buffer could not be mapped to CUDA!\r\n");
+    }
+
+    // Execute CUDA kernels
+
+    blocks = min(maxBlocks,
+        (int)ceil(numPoints * numPoints * numPoints / (float)threadsPerBlock));
+
+    // Check for containment of vertices
+    points_kernel << <blocks, threadsPerBlock >> >
+        (dev_points2, numPoints, func);
+    // Obtain the triangles from the data table
+    kernel3D << <blocks, threadsPerBlock >> >
+        (dev_points2, dev_geometry2, numPoints);
+
+    // Unmap buffer objects from CUDA
+    if (cudaGLUnmapBufferObject(vbo2[1]) != cudaSuccess)
+    {
+        printf("Could not unmap vbo from CUDA!\r\n");
+    }
+
+    if (cudaGLUnmapBufferObject(vbo2[2]) != cudaSuccess)
+    {
+        printf("Could not unmap vbo from CUDA!\r\n");
+    }
+    
 }
 
 __device__ __host__
@@ -791,7 +826,7 @@ void kernel3D(float4* points, float4* geom, int size)
     }
 }
 
-void generate_data(float4* points, float4* grid, float4* geom)
+void generate_data(float4* points, float4* grid, float4* geom, float4* color_black, float4* color_white)
 {
 
     // Initialize points data.
@@ -807,10 +842,20 @@ void generate_data(float4* points, float4* grid, float4* geom)
                 points[idx].y = xmax - delta * j;
                 points[idx].z = xmin + delta * k;
                 points[idx].w = 1.0f;
+
+                color_white[idx].x = 1.0f;
+                color_white[idx].y = 1.0f;
+                color_white[idx].z = 1.0f;
+                color_white[idx].w = 1.0f;
+
+                color_black[idx].x = 0.0f;
+                color_black[idx].y = 0.0f;
+                color_black[idx].z = 0.0f;
+                color_black[idx].w = 0.0f;
             }
         }
     }
-    /*
+    
     // Initialize grid data.
     for (int i = 0; i < (numPoints - 1); i++) {
         for (int j = 0; j < (numPoints - 1); j++) {
@@ -843,7 +888,7 @@ void generate_data(float4* points, float4* grid, float4* geom)
             }
         }
     }
-    */
+    
     // Initialize geometry data.
     float4 zero = make_float4(0.0f, 0.0f, 0.0f, 0.0f);
     for (int k = 0; k < (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 15; k++) {
@@ -865,9 +910,13 @@ void generate_data(float4* points, float4* grid, float4* geom)
 }
 
 // Create VBOs
-void createVBOs(GLuint* vbo)
+void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
 {
-    
+    glGenVertexArrays(2, vao);
+    glBindVertexArray(vao[0]);
+    // Create vertex buffer
+    glGenBuffers(4, vbo1);
+
     // Initialize points and grid
     unsigned int points_size;
     float4* points;
@@ -875,6 +924,9 @@ void createVBOs(GLuint* vbo)
     float4* grid;
     unsigned int geom_size;
     float4* geom;
+    unsigned int color_size;
+    float4* color_black;
+    float4* color_white;
 
     // Allocate memory
     points_size = numPoints * numPoints * numPoints * sizeof(float4);
@@ -885,51 +937,152 @@ void createVBOs(GLuint* vbo)
     geom_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 15
         * sizeof(float4);
     geom = (float4*)malloc(geom_size);
+    color_size = numPoints * numPoints * numPoints * sizeof(float4);
+    color_black = (float4*)malloc(color_size);
+    color_white = (float4*)malloc(color_size);
     // Initialize data
-    generate_data(points, grid, geom);
+    generate_data(points, grid, geom, color_black, color_white);
     
     /*
+        VAO[0]
+    */
+    /*
+        VBO1[0] - grid
+    */
     // Activate VBO id to use.
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
-
+    glBindBuffer(GL_ARRAY_BUFFER, vbo1[0]);
     // Upload data to video card.
     glBufferData(GL_ARRAY_BUFFER, grid_size, grid, GL_DYNAMIC_DRAW);
 
-    // Activate VBO id to use.
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[1]);
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo1[0]);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
 
+    /*
+        VBO1[1] - points formerly color
+    */
+    // Activate VBO id to use.
+    glBindBuffer(GL_ARRAY_BUFFER, vbo1[1]);
     // Upload data to video card.
     glBufferData(GL_ARRAY_BUFFER, points_size, points, GL_DYNAMIC_DRAW);
 
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo1[1]);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+
     // Register buffer objects with CUDA
-    if (cudaGLRegisterBufferObject(vbo[1]) != cudaSuccess)
+    if (cudaGLRegisterBufferObject(vbo1[1]) != cudaSuccess)
     {
         printf("Could not register vbo for CUDA access!\r\n");
     }
 
+    /*
+        VBO1[2] - geometry
+    */
     // Activate VBO id to use.
-    glBindBuffer(GL_ARRAY_BUFFER, vbo[2]);
-
+    glBindBuffer(GL_ARRAY_BUFFER, vbo1[2]);
     // Upload data to video card.
     glBufferData(GL_ARRAY_BUFFER, geom_size, geom, GL_DYNAMIC_DRAW);
 
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo1[2]);
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+
     // Register buffer objects with CUDA
-    if (cudaGLRegisterBufferObject(vbo[2]) != cudaSuccess)
+    if (cudaGLRegisterBufferObject(vbo1[2]) != cudaSuccess)
     {
         printf("Could not register vbo for CUDA access!\r\n");
     }
 
-    ;
+    /*
+        VBO1[3] - color_white
+    */
+    // Activate VBO id to use.
+    glBindBuffer(GL_ARRAY_BUFFER, vbo1[3]);
+    // Upload data to video card.
+    glBufferData(GL_ARRAY_BUFFER, color_size, color_white, GL_DYNAMIC_DRAW);
+
+    glEnableVertexAttribArray(3);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo1[3]);
+    glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+
+    /*
+        VAO[1]
+    */
+    /*
+        VBO2[0] - grid
+    */
+    glBindVertexArray(vao[1]);
+    // Create vertex buffer
+    glGenBuffers(4, vbo2);
+
+    // Activate VBO id to use.
+    glBindBuffer(GL_ARRAY_BUFFER, vbo2[0]);
+    // Upload data to video card.
+    glBufferData(GL_ARRAY_BUFFER, grid_size, grid, GL_DYNAMIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo2[0]);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+
+    /*
+        VBO2[1] - points formerly color
+    */
+    // Activate VBO id to use.
+    glBindBuffer(GL_ARRAY_BUFFER, vbo2[1]);
+    // Upload data to video card.
+    glBufferData(GL_ARRAY_BUFFER, points_size, points, GL_DYNAMIC_DRAW);
+
+    glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo2[1]);
+    glVertexAttribPointer(1, 4, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+
+    // Register buffer objects with CUDA
+    if (cudaGLRegisterBufferObject(vbo2[1]) != cudaSuccess)
+    {
+        printf("Could not register vbo for CUDA access!\r\n");
+    }
+
+    /*
+        VBO2[2] - geometry
+    */
+    // Activate VBO id to use.
+    glBindBuffer(GL_ARRAY_BUFFER, vbo2[2]);
+    // Upload data to video card.
+    glBufferData(GL_ARRAY_BUFFER, geom_size, geom, GL_DYNAMIC_DRAW);
+
+    glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo2[2]);
+    glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+
+    // Register buffer objects with CUDA
+    if (cudaGLRegisterBufferObject(vbo2[2]) != cudaSuccess)
+    {
+        printf("Could not register vbo for CUDA access!\r\n");
+    }
+
+    /*
+        VBO2[3] - color_black
+    */
+    // Activate VBO id to use.
+    glBindBuffer(GL_ARRAY_BUFFER, vbo2[3]);
+    // Upload data to video card.
+    glBufferData(GL_ARRAY_BUFFER, color_size, color_black, GL_DYNAMIC_DRAW);
+
+    glEnableVertexAttribArray(3);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo2[3]);
+    glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+
+    // Free temporary data
+    free(points); free(grid); free(geom); free(color_black); free(color_white);
 
     // Release VBOs with ID 0 after use.
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-    */
+    glBindVertexArray(0);
     // Execute the algorithm
-    // Free temporary data
-    free(points); free(grid); free(geom);
-    run_cuda_kernel(vbo);
+    run_cuda_kernel(vao, vbo1, vbo2);
 }
-/*
+
 // Delete VBOs
 void deleteVBOs(GLuint* vbo)
 {
@@ -950,11 +1103,10 @@ void deleteVBOs(GLuint* vbo)
     // Free VBOs
     *vbo = 0;
 }
-*/
+
 
 
 int getNumPoints()
 {
-    int i = 3;
-    return i;
+    return numPoints;
 }

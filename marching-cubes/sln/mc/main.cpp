@@ -18,11 +18,22 @@ GLuint vertexBufferId[] = { 0, 0 };
 GLuint colorBufferId[] = { 0, 0 };
 
 // VBOs
-GLuint vbo[3];  // ID of VBO for vertex arrays - 0 is reserved
+GLuint vbo1[4]; // ID of VBO for vertex arrays - 0 is reserved
 				// glGenBuffers() will return non-zero id if success
 				// vbo[0] - grid
 				// vbo[1] - points
 				// vbo[2] - geometry
+				// vbo[3] - color
+GLuint vbo2[4]; // ID of VBO for vertex arrays - 0 is reserved
+				// glGenBuffers() will return non-zero id if success
+				// vbo[0] - grid
+				// vbo[1] - points
+				// vbo[2] - geometry
+				// vbo[3] - color
+
+GLuint vao[2];  // ID of VAO
+				// vao[0] - content of polygon
+				// vao[1] - edge of polygon
 
 
 
@@ -128,33 +139,8 @@ GLuint loadShaders( const char * vertex_file_path, const char * fragment_file_pa
 
 std::vector<GLfloat> generateMesh()
 {
-	// Initialize points and grid
-	float4* points;
-	float4* grid;
-	float4* geom;
-	VERTEX v1;
-	v1.p[0] = 0;
-	VERTEX v2;
-	v2.p[0] = 0;
-	GLfloat value = 1;
-	createVBOs(vbo);
-	//lin_interpolation(v1, v2, value);
-	GLuint numPoints = 3;
-	VOXEL vox;
-	//marching_cubes(&vox);
-	int points_size = numPoints * numPoints * numPoints * sizeof(float4);
-	points = (float4*)malloc(points_size);
-	int grid_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 16
-		* sizeof(float4);
-	grid = (float4*)malloc(grid_size);
-	int geom_size = (numPoints - 1) * (numPoints - 1) * (numPoints - 1) * 15
-		* sizeof(float4);
-	geom = (float4*)malloc(geom_size);
-	//generate_data(points, grid, geom);
-
-	std::vector<GLfloat> mesh;
-	mesh.push_back(1.0);
-	/*
+	// createVBOs(vbo);
+	
 	GLsizei const size = 45;
 	num_points = size;
 
@@ -187,45 +173,8 @@ std::vector<GLfloat> generateMesh()
 	{
 		mesh.push_back(vertices[index]);
 	}
-	VOXEL vox;
-	TRIANGLE_COLLECTION* tc = marching_cubes(&vox);
-	*/
-	/*
-	VOXEL vox;
-	vox.v[0] = {0.0f, 0.0f, 0.0f};
-	vox.v[1] = { 0.0f, 2.0f, 0.0f };
-	vox.v[2] = { 2.0f, 2.0f, 0.0f };
-	vox.v[3] = { 2.0f, 0.0f, 0.0f };
-	vox.v[4] = { 0.0f, 0.0f, 2.0f };
-	vox.v[5] = { 0.0f, 2.0f, 2.0f };
-	vox.v[6] = { 2.0f, 2.0f, 2.0f };
-	vox.v[7] = { 2.0f, 0.0f, 2.0f };
-	for (int i = 0; i < 8; i++)
-	{
-		vox.val[i] = density(&vox.v[i]);
-	}
-
-	TRIANGLE_COLLECTION* tc = marching_cubes(&vox);
-	int num_tri = tc->num;
-	int num_points = num_tri * 3;
-
-	std::vector<GLfloat> mesh;
-
-	for (int i = 0; i < num_tri; i++)
-	{
-		mesh.push_back(tc->t[i].v1.p[0]);
-		mesh.push_back(tc->t[i].v1.p[1]);
-		mesh.push_back(tc->t[i].v1.p[2]);
-
-		mesh.push_back(tc->t[i].v2.p[0]);
-		mesh.push_back(tc->t[i].v2.p[1]);
-		mesh.push_back(tc->t[i].v2.p[2]);
-
-		mesh.push_back(tc->t[i].v3.p[0]);
-		mesh.push_back(tc->t[i].v3.p[1]);
-		mesh.push_back(tc->t[i].v3.p[2]);
-	}
-	*/
+	
+	
 	return mesh;
 }
 
@@ -259,12 +208,14 @@ void initializeOpenGL()
 {
 	glEnable(GL_DEPTH_TEST);
 	
-	glGenVertexArrays(1, &g_vertexArrayId[0]);
-	glBindVertexArray(g_vertexArrayId[0]);
+	//glGenVertexArrays(1, &g_vertexArrayId[0]);
+	//glBindVertexArray(g_vertexArrayId[0]);
 	//
-	//createVBOs(vbo);
+	createVBOs(vao, vbo1, vbo2);
 
+	/*
 	//
+	// Done in createVBOs()
 	glGenBuffers(1, &vertexBufferId[0]);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId[0]);
 	std::vector<GLfloat> const mesh = generateMesh();
@@ -282,7 +233,7 @@ void initializeOpenGL()
 	glEnableVertexAttribArray(1);
 	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId[0]);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
-
+	
 	glGenVertexArrays(1, &g_vertexArrayId[1]);
 	glBindVertexArray(g_vertexArrayId[1]);
 	
@@ -304,8 +255,8 @@ void initializeOpenGL()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
 
 	glBindVertexArray(0);
-
-	g_shaderId = loadShaders("Shader/vertex.glsl", "Shader/fragment.glsl");
+	*/
+	g_shaderId = loadShaders("vertex.glsl", "fragment.glsl");
 }
 
 void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
@@ -326,7 +277,10 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 	GLuint matrixUniform = glGetUniformLocation( g_shaderId, "modelViewPerspective" );
 	glUniformMatrix4fv( matrixUniform, 1, GL_FALSE, glm::value_ptr( modelViewProjectionMatrix ) );
 
-	glBindVertexArray( g_vertexArrayId[0] );
+	num_points = getNumPoints();
+	num_points = num_points + num_points + num_points;
+	//glBindVertexArray( g_vertexArrayId[0] );
+	glBindVertexArray(vao[0]);
 
 	// glPolygonMode gl_line anstatt gl_fill
 	// mit 2 vao zeichnen eins schwarz mit line und eins mit gl_fill normal (selbe meshdaten)
@@ -335,15 +289,17 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 	
 	glBindVertexArray( 0 );
 
-	glBindVertexArray(g_vertexArrayId[1]);
+	//glBindVertexArray(g_vertexArrayId[1]);
+	/*
+	glBindVertexArray(vao[1]);
 
 	// glPolygonMode gl_line anstatt gl_fill
 	// mit 2 vao zeichnen eins schwarz mit line und eins mit gl_fill normal (selbe meshdaten)
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	glDrawArrays(GL_TRIANGLES, 0, num_points);
-
+	
 	glBindVertexArray(0);
-
+	*/
 	glUseProgram(0);
 }
 

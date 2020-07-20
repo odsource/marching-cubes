@@ -4,6 +4,9 @@
     <Filter Include="marching_cubes">
       <UniqueIdentifier>{bedd6d8c-b811-4a6e-9f4b-fb577394657c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{43418819-005f-4191-aedf-af67163a3d88}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -19,5 +22,13 @@
     <ClInclude Include="marching_cubes_kernel.cuh">
       <Filter>marching_cubes</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fragment.glsl">
+      <Filter>Shader</Filter>
+    </None>
+    <None Include="vertex.glsl">
+      <Filter>Shader</Filter>
+    </None>
   </ItemGroup>
 </Project>

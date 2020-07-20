@@ -11,6 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="copyShader.bat" />
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -18,6 +21,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="marching_cubes_kernel.cuh" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fragment.glsl" />
+    <None Include="vertex.glsl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{22F75369-D49C-4C2D-B313-C99FD55F81EE}</ProjectGuid>
