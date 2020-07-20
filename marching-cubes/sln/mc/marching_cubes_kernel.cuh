@@ -46,9 +46,6 @@ typedef struct {
 	GLfloat val[8];
 } VOXEL;
 
-//TRIANGLE_COLLECTION* marching_cubes(VOXEL* vox);
-//GLfloat density(VERTEX* v);
-//VERTEX lin_interpolation(VERTEX v1, VERTEX v2, GLfloat value);
 void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2);
 int getNumPoints();
-//void generate_data(float4* points, float4* grid, float4* geom);
+void setNumPoints(int n);

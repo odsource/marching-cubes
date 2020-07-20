@@ -13,9 +13,9 @@
 #include <stdio.h>
 #include "marching_cubes_kernel.cuh"
 
-GLuint g_vertexArrayId[] = { 0, 1 };
-GLuint vertexBufferId[] = { 0, 0 };
-GLuint colorBufferId[] = { 0, 0 };
+//GLuint g_vertexArrayId[] = { 0, 1 };
+//GLuint vertexBufferId[] = { 0, 0 };
+//GLuint colorBufferId[] = { 0, 0 };
 
 // VBOs
 GLuint vbo1[4]; // ID of VBO for vertex arrays - 0 is reserved
@@ -39,7 +39,10 @@ GLuint vao[2];  // ID of VAO
 
 
 GLuint g_shaderId = 0;
+GLsizei num_grid = 0;
 GLsizei num_points = 0;
+GLsizei num_geom = 0;
+
 GLsizei num_tri = 0;
 
 GLuint loadShaders( const char * vertex_file_path, const char * fragment_file_path )
@@ -136,7 +139,7 @@ GLuint loadShaders( const char * vertex_file_path, const char * fragment_file_pa
 
 	return ProgramID;
 }
-
+/*
 std::vector<GLfloat> generateMesh()
 {
 	// createVBOs(vbo);
@@ -203,7 +206,7 @@ std::vector<GLfloat> generateColorData(int vao)
 
 	return colors;
 }
-
+*/
 void initializeOpenGL()
 {
 	glEnable(GL_DEPTH_TEST);
@@ -211,8 +214,12 @@ void initializeOpenGL()
 	//glGenVertexArrays(1, &g_vertexArrayId[0]);
 	//glBindVertexArray(g_vertexArrayId[0]);
 	//
+	printf("\r\n");
+	printf("Kernel call initialized!\r\n");
+	setNumPoints(100);
 	createVBOs(vao, vbo1, vbo2);
-
+	printf("Kernel call ended successfully!\r\n");
+	printf("\r\n");
 	/*
 	//
 	// Done in createVBOs()
@@ -278,14 +285,19 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 	glUniformMatrix4fv( matrixUniform, 1, GL_FALSE, glm::value_ptr( modelViewProjectionMatrix ) );
 
 	num_points = getNumPoints();
-	num_points = num_points + num_points + num_points;
+	num_grid = (num_points - 1) * (num_points - 1) * (num_points - 1) * 16;
+	num_points = num_points * num_points * num_points;
+	num_geom = (num_points - 1) * (num_points - 1) * (num_points - 1) * 15;
+
+	GLsizei n = num_geom;
+	
 	//glBindVertexArray( g_vertexArrayId[0] );
 	glBindVertexArray(vao[0]);
-
 	// glPolygonMode gl_line anstatt gl_fill
 	// mit 2 vao zeichnen eins schwarz mit line und eins mit gl_fill normal (selbe meshdaten)
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	glDrawArrays(GL_TRIANGLES, 0, num_points);
+	//glDrawArrays(GL_QUADS, 0, n);
+	glDrawArrays(GL_TRIANGLES, 0, n);
 	
 	glBindVertexArray( 0 );
 
@@ -296,7 +308,7 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 	// glPolygonMode gl_line anstatt gl_fill
 	// mit 2 vao zeichnen eins schwarz mit line und eins mit gl_fill normal (selbe meshdaten)
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	glDrawArrays(GL_TRIANGLES, 0, num_points);
+	glDrawArrays(GL_TRIANGLES, 0, n);
 	
 	glBindVertexArray(0);
 	*/

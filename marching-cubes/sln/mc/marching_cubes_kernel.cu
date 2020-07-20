@@ -14,7 +14,7 @@
 // Rendering variables
 float xmax = 10.0f;
 float xmin = -10.0f;
-int numPoints = 80;
+int numPoints = 20;
 int func = 0;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -665,14 +665,14 @@ void run_cuda_kernel(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     
     // Choose a block size and a grid size
     const unsigned int threadsPerBlock = BLOCK_SIZE;
-    const unsigned int maxBlocks = 50;
+    const unsigned int maxBlocks = 100;
     unsigned int blocks;
 
     // Execute CUDA kernels
 
     blocks = min(maxBlocks,
         (int)ceil(numPoints * numPoints * numPoints / (float)threadsPerBlock));
-
+    printf("\tNumber of CUDA blocks: %d\r\n", blocks);
     // Check for containment of vertices
     points_kernel << <blocks, threadsPerBlock >> >
         (dev_points, numPoints, func);
@@ -690,7 +690,7 @@ void run_cuda_kernel(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     {
         printf("Could not unmap vbo from CUDA!\r\n");
     }
-    
+    /*
     // Second VAO
 
     glBindVertexArray(vao[1]);
@@ -731,7 +731,7 @@ void run_cuda_kernel(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     {
         printf("Could not unmap vbo from CUDA!\r\n");
     }
-    
+    */
 }
 
 __device__ __host__
@@ -952,7 +952,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     // Activate VBO id to use.
     glBindBuffer(GL_ARRAY_BUFFER, vbo1[0]);
     // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, grid_size, grid, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, grid_size, grid, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vbo1[0]);
@@ -1000,7 +1000,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     // Activate VBO id to use.
     glBindBuffer(GL_ARRAY_BUFFER, vbo1[3]);
     // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, color_size, color_white, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, color_size, color_white, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(3);
     glBindBuffer(GL_ARRAY_BUFFER, vbo1[3]);
@@ -1109,4 +1109,9 @@ void deleteVBOs(GLuint* vbo)
 int getNumPoints()
 {
     return numPoints;
+}
+
+void setNumPoints(int n)
+{
+    numPoints = n;
 }
