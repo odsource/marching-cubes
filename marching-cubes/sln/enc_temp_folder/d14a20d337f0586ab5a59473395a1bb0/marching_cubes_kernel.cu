@@ -589,7 +589,62 @@ int numVertsTable[256] =
 
 __global__ void points_kernel(float4* points, int size, int func);
 __global__ void kernel3D(float4* points, float4* geom, int size);
+/*
+TRIANGLE_COLLECTION* marching_cubes(VOXEL* vox)
+{
+    GLfloat isolevel = 0;
+    // Index anhand des Vorzeichens berechnen
+    GLfloat density_values[8];
+    for (int i = 0; i < 8; i++)
+    {
+        //density_values[i] = vox->val[i];
+    }
 
+    int cubeindex = 0;
+    if (density_values[0] >= isolevel) cubeindex |= 1;
+    if (density_values[1] >= isolevel) cubeindex |= 2;
+    if (density_values[2] >= isolevel) cubeindex |= 4;
+    if (density_values[3] >= isolevel) cubeindex |= 8;
+    if (density_values[4] >= isolevel) cubeindex |= 16;
+    if (density_values[5] >= isolevel) cubeindex |= 32;
+    if (density_values[6] >= isolevel) cubeindex |= 64;
+    if (density_values[7] >= isolevel) cubeindex |= 128;
+
+    printf("Cubeindex: %d\r\n", cubeindex);
+    int edge_entry = edgeTable[cubeindex];
+    printf("Edge entry: %d\r\n", edge_entry);
+    int num_verts = numVertsTable[cubeindex];
+    printf("Number of Vertices: %d\r\n", num_verts);
+    int num_tri = num_verts / 3;
+    printf("Number of Triangles: %d\r\n", num_tri);
+
+    // getting the desired edges
+    std::vector<int[2]> t;
+    for (int edge : triTable[cubeindex])
+    {
+        t.push_back(edge_map[edge]);
+    }
+
+
+	TRIANGLE_COLLECTION tri = {};
+	
+	tri.num = num_tri;
+	return &tri;
+};
+
+GLfloat density(VERTEX* v)
+{
+	if (func == 0)
+	{
+		return (sin(v->p[0]) - sin(v->p[1]) + sin(v->p[2]));
+	}
+}
+
+VERTEX lin_interpolation(VERTEX v1, VERTEX v2, GLfloat* value)
+{
+	return v1;
+}
+*/
 void run_cuda_kernel(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
 {
     glBindVertexArray(vao[0]);

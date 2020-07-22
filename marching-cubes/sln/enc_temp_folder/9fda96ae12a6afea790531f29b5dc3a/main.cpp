@@ -139,18 +139,130 @@ GLuint loadShaders( const char * vertex_file_path, const char * fragment_file_pa
 
 	return ProgramID;
 }
+/*
+std::vector<GLfloat> generateMesh()
+{
+	// createVBOs(vbo);
+	
+	GLsizei const size = 45;
+	num_points = size;
 
+	GLfloat const vertices[size] = {
+		0.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+
+		0.0f, 1.0f, 0.0f,
+		-1.0f, -1.0f, 0.0f,
+		-2.0f, 1.0f, 0.0f,
+
+		0.0f, 1.0f, 0.0f,
+		2.0f, 1.0f, 0.0f,
+		1.0f, -1.0f, 0.0f,
+
+		-2.0f, -1.0f, -2.0f,
+		-2.0f, -1.0f, 2.0f,
+		2.0f, -1.0f, 2.0f,
+
+		-2.0f, -1.0f, -2.0f,
+		2.0f, -1.0f, 2.0f,
+		2.0f, -1.0f, -2.0f
+	};
+
+
+	std::vector<GLfloat> mesh;
+
+	for (int index = 0; index < size; index++)
+	{
+		mesh.push_back(vertices[index]);
+	}
+	
+	
+	return mesh;
+}
+
+std::vector<GLfloat> generateColorData(int vao)
+{
+	std::vector<GLfloat> colors;
+	if (vao == 0)
+	{
+		for (int i = 0; i < num_points; i++)
+		{
+			colors.push_back(1.0f);
+			colors.push_back(1.0f);
+			colors.push_back(1.0f);
+		}
+	}
+	else
+	{
+		for (int i = 0; i < num_points; i++)
+		{
+			colors.push_back(0.0f);
+			colors.push_back(0.0f);
+			colors.push_back(0.0f);
+		}
+	}
+	
+
+	return colors;
+}
+*/
 void initializeOpenGL()
 {
 	glEnable(GL_DEPTH_TEST);
-
+	
+	//glGenVertexArrays(1, &g_vertexArrayId[0]);
+	//glBindVertexArray(g_vertexArrayId[0]);
+	//
 	printf("\r\n");
 	printf("Kernel call initialized!\r\n");
 	setNumPoints(3);
 	createVBOs(vao, vbo1, vbo2);
 	printf("Kernel call ended successfully!\r\n");
 	printf("\r\n");
+	/*
+	//
+	// Done in createVBOs()
+	glGenBuffers(1, &vertexBufferId[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId[0]);
+	std::vector<GLfloat> const mesh = generateMesh();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mesh.size(), &mesh[0], GL_STATIC_DRAW);
 
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId[0]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+	
+	glGenBuffers(1, &colorBufferId[0]);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId[0]);
+	std::vector<GLfloat> const colors = generateColorData(0);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * colors.size(), &colors[0], GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId[0]);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+	
+	glGenVertexArrays(1, &g_vertexArrayId[1]);
+	glBindVertexArray(g_vertexArrayId[1]);
+	
+	glGenBuffers(1, &vertexBufferId[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId[1]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * mesh.size(), &mesh[0], GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBufferId[1]);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+	
+	glGenBuffers(1, &colorBufferId[1]);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId[1]);
+	std::vector<GLfloat> const colors2 = generateColorData(1);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * colors2.size(), &colors2[0], GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(1);
+	glBindBuffer(GL_ARRAY_BUFFER, colorBufferId[1]);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, (void*)NULL);
+
+	glBindVertexArray(0);
+	*/
 	g_shaderId = loadShaders("vertex.glsl", "fragment.glsl");
 }
 

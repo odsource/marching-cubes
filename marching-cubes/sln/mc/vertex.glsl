@@ -2,7 +2,7 @@
 
 uniform mat4 modelViewPerspective;
 
-layout( location = 2 ) in vec4 vertex;
+layout( location = 1 ) in vec4 vertex;
 layout( location = 3 ) in vec4 color;
 
 out vec4 frag_color;
