@@ -17,8 +17,6 @@
 #include <cuda_runtime.h>
 #include <cuda_runtime_api.h>
 #include <cuda_gl_interop.h>
-#include <thrust/device_vector.h>
-#include <thrust/scan.h>
 
 
 

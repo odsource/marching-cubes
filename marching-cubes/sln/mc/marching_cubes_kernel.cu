@@ -871,8 +871,8 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
         * sizeof(float4);
     geom = (float4*)malloc(geom_size);
     color_size = numPoints * numPoints * numPoints * sizeof(float4);
-    color_black = (float4*)malloc(color_size);
     color_white = (float4*)malloc(color_size);
+    color_black = (float4*)malloc(color_size);
     // Initialize data
     generate_data(points, grid, geom, color_black, color_white);
     
@@ -897,7 +897,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     // Activate VBO id to use.
     glBindBuffer(GL_ARRAY_BUFFER, vbo1[1]);
     // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, points_size, points, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, points_size, points, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, vbo1[1]);
@@ -915,7 +915,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     // Activate VBO id to use.
     glBindBuffer(GL_ARRAY_BUFFER, vbo1[2]);
     // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, geom_size, geom, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, geom_size, geom, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(2);
     glBindBuffer(GL_ARRAY_BUFFER, vbo1[2]);
@@ -952,7 +952,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     // Activate VBO id to use.
     glBindBuffer(GL_ARRAY_BUFFER, vbo2[0]);
     // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, grid_size, grid, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, grid_size, grid, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, vbo2[0]);
@@ -964,7 +964,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     // Activate VBO id to use.
     glBindBuffer(GL_ARRAY_BUFFER, vbo2[1]);
     // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, points_size, points, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, points_size, points, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, vbo2[1]);
@@ -982,7 +982,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     // Activate VBO id to use.
     glBindBuffer(GL_ARRAY_BUFFER, vbo2[2]);
     // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, geom_size, geom, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, geom_size, geom, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(2);
     glBindBuffer(GL_ARRAY_BUFFER, vbo2[2]);
@@ -1000,7 +1000,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     // Activate VBO id to use.
     glBindBuffer(GL_ARRAY_BUFFER, vbo2[3]);
     // Upload data to video card.
-    glBufferData(GL_ARRAY_BUFFER, color_size, color_black, GL_DYNAMIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, color_size, color_black, GL_STATIC_DRAW);
 
     glEnableVertexAttribArray(3);
     glBindBuffer(GL_ARRAY_BUFFER, vbo2[3]);
@@ -1037,8 +1037,6 @@ void deleteVBOs(GLuint* vbo)
     // Free VBOs
     *vbo = 0;
 }
-
-
 
 int getNumPoints()
 {

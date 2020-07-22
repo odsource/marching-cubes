@@ -146,7 +146,7 @@ void initializeOpenGL()
 
 	printf("\r\n");
 	printf("Kernel call initialized!\r\n");
-	setNumPoints(3);
+	setNumPoints(100);
 	createVBOs(vao, vbo1, vbo2);
 	printf("Kernel call ended successfully!\r\n");
 	printf("\r\n");
@@ -177,7 +177,7 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 	num_points = num_points * num_points * num_points;
 	num_geom = (num_points - 1) * (num_points - 1) * (num_points - 1) * 15;
 
-	GLsizei n = num_points;
+	GLsizei n = num_grid;
 	//glBindVertexArray( g_vertexArrayId[0] );
 	glBindVertexArray(vao[0]);
 	// glPolygonMode gl_line anstatt gl_fill
@@ -185,11 +185,11 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	//glDrawArrays(GL_QUADS, 0, n);
 	glDrawArrays(GL_POINTS, 0, n);
-	
+
 	glBindVertexArray( 0 );
 
 	//glBindVertexArray(g_vertexArrayId[1]);
-	
+	/*
 	glBindVertexArray(vao[1]);
 
 	// glPolygonMode gl_line anstatt gl_fill
@@ -198,14 +198,15 @@ void drawOpenGL( Window const * const _window, clock_t const & _lastInterval )
 	glDrawArrays(GL_TRIANGLES, 0, n);
 	
 	glBindVertexArray(0);
-	
+	*/
 	glUseProgram(0);
+	//printf("%d, ", glGetError());
 }
 
 int main( int _argc, char ** _argv )
 {
 	Window * window = Window::getInstance();
-
+	printf("1. %d, ", glGetError());
 	window->open( "Marching Cubes", 800, 600 );
 	window->setEyePoint( glm::vec4( 0.0f, 0.0f, 1000.0f, 1.0f ) );
 	window->setActive();
