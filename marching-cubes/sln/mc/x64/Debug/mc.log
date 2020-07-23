@@ -1,2 +1,242 @@
-﻿  main.cpp
+﻿  Compiling CUDA source file marching_cubes_kernel.cu...
+  
+  F:\marching_cubes\marching-cubes\sln\mc>"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\bin\nvcc.exe" -gencode=arch=compute_30,code=\"sm_30,compute_30\" --use-local-env -ccbin "C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\bin\HostX86\x64" -x cu  -I..\..\src\GLEW\include -I..\..\src\GLFW\include -I..\..\src\glm\include -I..\..\src\Framework\include -Iinclude -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\include" -I"C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.2\include"  -G   --keep-dir x64\Debug -maxrregcount=0  --machine 64 --compile -cudart static  -g   -DWIN32 -DWIN64 -D_DEBUG -D_CONSOLE -DGLEW_STATIC -D_MBCS -Xcompiler "/EHsc /W3 /nologo /Od /Fdx64\Debug\vc142.pdb /FS /Zi /RTC1 /MDd " -o x64\Debug\marching_cubes_kernel.cu.obj "F:\marching_cubes\marching-cubes\sln\mc\marching_cubes_kernel.cu" 
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(97): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(97): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(98): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(98): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(249): warning : __device__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(249): warning : __host__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x4.hpp(35): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x4.hpp(35): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(94): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(94): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(95): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(95): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(143): warning : __device__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(143): warning : __host__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(98): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(98): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(99): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(99): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(176): warning : __device__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(176): warning : __host__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x2.hpp(35): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x2.hpp(35): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x3.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x3.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x4.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x4.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x2.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x2.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x3.hpp(35): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x3.hpp(35): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x4.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x4.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x2.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x2.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x3.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x3.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(95): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(95): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(96): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(96): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(132): warning : __device__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(132): warning : __host__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(42): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(49): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(50): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(51): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(52): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(53): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(54): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(83): warning : __device__ annotation is ignored on a function("qua") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(83): warning : __host__ annotation is ignored on a function("qua") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(84): warning : __device__ annotation is ignored on a function("qua") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(84): warning : __host__ annotation is ignored on a function("qua") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(119): warning : __device__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(119): warning : __host__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(97): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(97): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(98): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(98): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(249): warning : __device__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec4.hpp(249): warning : __host__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x4.hpp(35): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x4.hpp(35): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(94): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(94): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(95): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(95): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(143): warning : __device__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec2.hpp(143): warning : __host__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(98): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(98): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(99): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(99): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(176): warning : __device__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_vec3.hpp(176): warning : __host__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x2.hpp(35): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x2.hpp(35): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x3.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x3.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x4.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat2x4.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x2.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x2.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x3.hpp(35): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x3.hpp(35): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x4.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat3x4.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x2.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x2.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x3.hpp(36): warning : __device__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_mat4x3.hpp(36): warning : __host__ annotation is ignored on a function("mat") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(95): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(95): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(96): warning : __device__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(96): warning : __host__ annotation is ignored on a function("vec") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(132): warning : __device__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\detail/type_vec1.hpp(132): warning : __host__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(42): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(49): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(50): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(51): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(52): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(53): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\Framework\include\Camera.hpp(54): warning : type qualifier on return type is meaningless
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(83): warning : __device__ annotation is ignored on a function("qua") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(83): warning : __host__ annotation is ignored on a function("qua") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(84): warning : __device__ annotation is ignored on a function("qua") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(84): warning : __host__ annotation is ignored on a function("qua") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(119): warning : __device__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:\marching_cubes\marching-cubes\src\glm\include\glm\ext\../detail/type_quat.hpp(119): warning : __host__ annotation is ignored on a function("operator=") that is explicitly defaulted on its first declaration
+  
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(783): warning : a __device__ variable "edge_map" cannot be directly read in a host function
+  
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(784): warning : a __device__ variable "edge_map" cannot be directly read in a host function
+  
+  marching_cubes_kernel.cu
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(611): warning C4996: 'cudaGLMapBufferObject': wurde als veraltet deklariert
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(616): warning C4996: 'cudaGLMapBufferObject': wurde als veraltet deklariert
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(647): warning C4996: 'cudaGLUnmapBufferObject': wurde als veraltet deklariert
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(652): warning C4996: 'cudaGLUnmapBufferObject': wurde als veraltet deklariert
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(712): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(718): warning C4244: "=": Konvertierung von "double" in "float", möglicher Datenverlust
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(734): warning C4244: "=": Konvertierung von "int" in "float", möglicher Datenverlust
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(774): warning C4244: "+=": Konvertierung von "double" in "int", möglicher Datenverlust
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(976): warning C4996: 'cudaGLRegisterBufferObject': wurde als veraltet deklariert
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(994): warning C4996: 'cudaGLRegisterBufferObject': wurde als veraltet deklariert
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(1043): warning C4996: 'cudaGLRegisterBufferObject': wurde als veraltet deklariert
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(1061): warning C4996: 'cudaGLRegisterBufferObject': wurde als veraltet deklariert
+F:/marching_cubes/marching-cubes/sln/mc/marching_cubes_kernel.cu(1101): warning C4996: 'cudaGLUnregisterBufferObject': wurde als veraltet deklariert
   mc.vcxproj -> F:\marching_cubes\marching-cubes\sln\x64\Debug\mc.exe

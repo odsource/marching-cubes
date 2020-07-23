@@ -8,7 +8,7 @@
 #include <helper_math.h>
 //#include <vector>
 #include "marching_cubes_kernel.cuh"
-
+#include <time.h>
 #define BLOCK_SIZE 512
 
 // Rendering variables
@@ -16,6 +16,16 @@ float xmax = 5.0f;
 float xmin = -5.0f;
 int numPoints = 2;
 int func = 0;
+
+unsigned int points_size;
+float4* points;
+unsigned int grid_size;
+float4* grid;
+unsigned int geom_size;
+float4* geom;
+unsigned int color_size;
+float4* color_black;
+float4* color_white;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Marching cubes table data												 //
@@ -587,8 +597,8 @@ int numVertsTable[256] =
     0,
 };
 
-__global__ void points_kernel(float4* points, int size, int func);
-__global__ void kernel3D(float4* points, float4* geom, int size);
+__host__ void points_kernel(float4* points, int size, int func);
+__host__ void kernel3D(float4* points, float4* geom, int size);
 
 void run_cuda_kernel(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
 {
@@ -620,12 +630,19 @@ void run_cuda_kernel(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     printf("\tNumber of CUDA blocks: %d\r\n", blocks);
     printf("\tNumber of threads per block: %d\r\n", threadsPerBlock);
     // Check for containment of vertices
-    points_kernel << <blocks, threadsPerBlock >> >
-        (dev_points, numPoints, func);
-    // Obtain the triangles from the data table
-    kernel3D << <blocks, threadsPerBlock >> >
-        (dev_points, dev_geometry, numPoints);
 
+    double tstart, time1 = 0.0;
+    tstart = clock();
+    points_kernel// << <blocks, threadsPerBlock >> >
+        //(dev_points, numPoints, func);
+        (points, numPoints, func);
+    // Obtain the triangles from the data table
+    kernel3D //<< <blocks, threadsPerBlock >> >
+        (points, geom, numPoints);
+        //(dev_points, dev_geometry, numPoints);
+    time1 += clock() - tstart;
+    time1 = (time1 / CLOCKS_PER_SEC) * 1000000;
+    printf("\tTime for kernel in microseconds: %f\r\n", time1);
     // Unmap buffer objects from CUDA
     if (cudaGLUnmapBufferObject(vbo1[1]) != cudaSuccess)
     {
@@ -636,7 +653,7 @@ void run_cuda_kernel(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     {
         printf("Could not unmap vbo from CUDA!\r\n");
     }
-    
+    /*
     // Second VAO
 
     glBindVertexArray(vao[1]);
@@ -677,10 +694,10 @@ void run_cuda_kernel(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     {
         printf("Could not unmap vbo from CUDA!\r\n");
     }
-    
+    */
 }
 
-__device__ __host__
+/*__device__*/ __host__
 int density_func(float4& point, int func)
 {
     float fun; int flag;
@@ -708,21 +725,72 @@ int density_func(float4& point, int func)
 }
 
 // This kernel checks whether each point lies within the desired surface.
-__global__
+__host__
 void points_kernel(float4* points, int size, int func)
 {
+    for (int i = 0; i < size * size * size; i += 1)
+    {
+        float4 pt = points[i];
+        points[i].w = density_func(pt, func);
+    }
+    /*
     unsigned int globalID = blockIdx.x * blockDim.x + threadIdx.x;
 
     for (int k = globalID; k < size * size * size; k += gridDim.x * blockDim.x) {
         float4 pt = points[k];
         points[k].w = density_func(pt, func);
     }
+    */
 }
 
 // This kernel classifies each cube in the grid.
-__global__
+__host__
 void kernel3D(float4* points, float4* geom, int size)
 {
+    for (int i = 0; i < size * size * size; i++)
+    {
+        // Transform point ID to cube ID
+        int j = (int)((int)floor((double)(i / size)) % size);
+        int k = (int)floor((double)(i / (size * size)));
+        int idx = i - j + k - 2 * k * size;
+
+        if (idx < (size - 1) * (size - 1) * (size - 1)) {
+
+            // Get the vertices of this cube
+            float4 verts[8];
+            verts[0] = points[i];
+            verts[1] = points[i + 1];
+            verts[2] = points[i + size + 1];
+            verts[3] = points[i + size];
+
+            verts[4] = points[i + size * size];
+            verts[5] = points[i + size * size + 1];
+            verts[6] = points[i + size * size + size + 1];
+            verts[7] = points[i + size * size + size];
+
+            // Obtain the type/index of this cube
+            int type = 0;
+            for (int l = 0; l < 8; l++) {
+                type += verts[l].w * pow((double)2, (double)l);
+            }
+
+            // Get the configuration for this type of cube from the table
+            // and generate the triangles accordingly
+            int* config = triTable[type];
+            int e, e0, e1;
+            for (int l = 0; l < 15; l++) {
+                e = config[l];
+                e0 = edge_map[e][0];
+                e1 = edge_map[e][1];
+                if (e != -1) {
+                    geom[15 * idx + l] = (verts[e0] + verts[e1]) * (0.5f);
+                    geom[15 * idx + l].w = 1.0f;
+                }
+                else { break; }
+            }
+        }
+    }
+    /*
     // Get unique thread ID, this is the point ID
     unsigned int globalID = blockIdx.x * blockDim.x + threadIdx.x;
 
@@ -770,6 +838,7 @@ void kernel3D(float4* points, float4* geom, int size)
 
         }
     }
+    */
 }
 
 void generate_data(float4* points, float4* grid, float4* geom, float4* color_black, float4* color_white)
@@ -849,7 +918,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     glBindVertexArray(vao[0]);
     // Create vertex buffer
     glGenBuffers(4, vbo1);
-
+    /*
     // Initialize points and grid
     unsigned int points_size;
     float4* points;
@@ -860,7 +929,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     unsigned int color_size;
     float4* color_black;
     float4* color_white;
-
+    */
     // Allocate memory
     points_size = numPoints * numPoints * numPoints * sizeof(float4);
     points = (float4*)malloc(points_size);
@@ -1011,7 +1080,7 @@ void createVBOs(GLuint* vao, GLuint* vbo1, GLuint* vbo2)
     glBindVertexArray(0);
 
     // Free temporary data
-    free(points); free(grid); free(geom); free(color_black); free(color_white);
+    //free(points); free(grid); free(geom); free(color_black); free(color_white);
 
     // Execute the algorithm
     run_cuda_kernel(vao, vbo1, vbo2);
